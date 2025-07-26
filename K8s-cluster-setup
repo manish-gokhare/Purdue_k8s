@@ -53,6 +53,13 @@ It is highly recommended to disable swap space on your Ubuntu instances so that 
 $ sudo swapoff -a
 $ sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
+3) set selinux permissive
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
+
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+
 Now, load the following kernel modules using modprobe command.
 
 $ sudo modprobe overlay
