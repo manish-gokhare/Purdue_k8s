@@ -142,6 +142,7 @@ sudo yum install -y kubelet kubeadm kubectl
 sudo systemctl enable --now kubelet
 
 
+or On Ubuntu..
 
 5) Add Kubernetes Package Repository
 Kubernetes packages are not available in the default package repositories of Ubuntu 24.04, so for its installation first add it’s repository. Run these steps on each instance.
@@ -159,6 +160,9 @@ Install Kubernetes components like Kubeadm, kubelet and kubectl, run following a
 $ sudo apt update
 $ sudo apt install kubelet kubeadm kubectl -y
 $ sudo apt-mark hold kubeadm kubelet kubectl ( Prevent updating a package)
+
+
+
 
 6) Initialize Kubernetes Cluster
 As all the prerequisites are met, now we are good to start the installation of Kubernetes on Ubuntu 24.04.
