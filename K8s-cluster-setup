@@ -127,6 +127,21 @@ Restart containerd service so that above changes come into the affect.
 $ sudo systemctl restart containerd
 
 
+5) Add Kubernetes Package Repository - Configure repository for k8s on RHEL8
+
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
+EOF
+
+sudo yum install -y kubelet kubeadm kubectl
+sudo systemctl enable --now kubelet
+
+
 
 5) Add Kubernetes Package Repository
 Kubernetes packages are not available in the default package repositories of Ubuntu 24.04, so for its installation first add it’s repository. Run these steps on each instance.
