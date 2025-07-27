@@ -141,6 +141,12 @@ EOF
 sudo yum install -y kubelet kubeadm kubectl
 sudo systemctl enable --now kubelet
 
+[rheluser@worker ~]$ rpm -qa | grep kub
+kubernetes-cni-1.4.0-150500.1.1.x86_64
+kubectl-530.0.0-1.x86_64
+kubelet-1.30.14-150500.1.1.x86_64
+kubeadm-1.30.14-150500.1.1.x86_64
+
 
 or On Ubuntu..
 
