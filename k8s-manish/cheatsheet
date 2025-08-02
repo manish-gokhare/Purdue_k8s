@@ -1,3 +1,0 @@
-kubectl get nodes    # to get the number of nodes in the cluster
-kubectl get pods -o wise    # to get the number of pods in the cluster
-
