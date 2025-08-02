@@ -1,0 +1,232 @@
+kubectl get nodes    # to get the number of nodes in the cluster
+kubectl get pods -o wide    # to get the number of pods in the cluster
+
+# To create the pod in the cluster
+
+[node1 ~]$ kubectl run nginx-pod-1 --image nginx
+pod/nginx-pod-1 created
+
+#List the pod in the cluster
+[node1 ~]$ kubectl get pods -o wide
+NAME          READY   STATUS    RESTARTS   AGE   IP         NODE    NOMINATED NODE   READINESS GATES
+nginx-pod-1   1/1     Running   0          12s   10.5.1.2   node2   <none>           <none>
+
+```bash
+kubectl describe pod nginx-pod-1
+```
+This command provides **detailed information** about the Kubernetes pod named `nginx-pod-1`. It's useful for debugging, understanding resource 
+allocations, and inspecting pod status.
+
+## 🔍 What It Shows
+
+Running this command outputs:
+
+- **Pod Status**
+  - Phase (e.g., `Running`, `Pending`, `Succeeded`)
+  - Conditions (e.g., `Ready`, `Initialized`)
+- **Container Details**
+  - Container name(s), image used, port mappings
+  - Environment variables, resource limits/requests
+- **Events**
+  - Lifecycle events such as scheduling, starting, pulling images, failures
+- **Volumes & Mounts**
+  - Information about attached volumes and how they're mounted
+- **Labels & Annotations**
+  - Metadata useful for selection, filtering, and management
+- **Node Placement**
+  - The node where the pod is currently running
+
+---
+## 📎 Example Use Case
+
+If your pod `nginx-pod-1` is misbehaving or stuck in `CrashLoopBackOff`, this command helps identify issues like:
+
+- Image pull failures
+- Unsatisfied resource limits
+- Networking or volume mounting problems
+
+## 🧠 Pro Tip
+
+Use this together with `kubectl logs nginx-pod-1` to get application-level logs and pinpoint errors inside the container.
+
+Or we can use
+[node1 ~]$ kubectl logs pod/nginx-pod-1  
+
+
+Sure, Manish! Let’s unpack this `kubectl exec` command, and I’ll show you exactly how to use it to “step inside” your `nginx-pod-1`. 🎯
+
+---
+
+## 🚪 `kubectl exec` – Enter a Container’s World
+
+```bash
+kubectl exec (POD | TYPE/NAME) [-c CONTAINER] [flags] -- COMMAND [args...] [options]
+```
+
+### 🔍 Components Explained
+
+| Element               | Type            | Description                                                                 |
+|------------------------|-----------------|-----------------------------------------------------------------------------|
+| `kubectl exec`         | Command         | Executes a command inside a container running in a pod                     |
+| `POD` or `TYPE/NAME`   | Required        | Target pod name (e.g. `nginx-pod-1`) or resource type/name like `pod/nginx-pod-1` |
+| `-c CONTAINER`         | Optional flag   | Specify container if the pod has more than one                             |
+| `--`                   | Required        | Separator indicating end of flags and start of command to run              |
+| `COMMAND [args...]`    | Required        | Command to run inside the container (e.g. `sh`, `bash`, `ls`, etc.)        |
+| `[options]`            | Optional flags  | Add-on flags like `--namespace`, `--stdin`, etc.                            |
+
+---
+
+## 👣 Example: Step Into `nginx-pod-1`
+
+If you want to open an interactive shell inside the container, here’s the common usage:
+
+### 🐚 Bash (if available in container)
+```bash
+kubectl exec -it nginx-pod-1 -- /bin/bash
+```
+
+### 🐚 SH (fallback if Bash isn’t available)
+```bash
+kubectl exec -it nginx-pod-1 -- /bin/sh
+```
+
+> 💡 The `-it` flag gives you an interactive terminal — like SSH, but for containers.
+
+---
+
+## 🧠 Note
+
+- If your pod has **multiple containers**, add `-c container-name` to target the right one:
+```bash
+kubectl exec -it nginx-pod-1 -c nginx-container -- /bin/bash
+```
+- You can run **one-off commands** too, like:
+```bash
+kubectl exec nginx-pod-1 -- ls /var/log
+```
+
+---
+We can install the required software inside the pod or container in the pod.
+
+kubectl exec nginx-pod-1 -c nginx-pod-1 -- apt-get install net-tools -y
+
+We can run the netstat command now. So netstat got installed in that pod. If pod restarts changes will be lost.
+
+
+🧵 Intra-Pod Connectivity: What You Need to Know
+Kubernetes networking ensures that:
+
+> Every pod gets its own IP address
+
+> All pods in the cluster can reach each other directly, unless restricted by Network Policies
+
+> You can use pod IPs or, preferably, services to refer to each other
+  
+
+[node1 ~]$ kubectl get pods -o wide
+NAME          READY   STATUS    RESTARTS   AGE    IP         NODE    NOMINATED NODE   READINESS GATES
+httpd-pod-1   1/1     Running   0          20s    10.5.2.2   node3   <none>           <none>
+nginx-pod-1   1/1     Running   0          170m   10.5.1.2   node2   <none>           <none>
+
+[node1 ~]$ kubectl exec nginx-pod-1 -- curl http://10.5.2.2:80
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    45  100    45    0     0  20026      0 --:--:-- --:--:-- --:--:-- 22500
+<html><body><h1>It works!</h1></body></html>
+
+
+httpd-pod-1  can make internal web request to itself using curl. HTTP service by default listens on port 80. So if we do curl localhost
+, it acess index.html and display
+
+As curl was not installed in httpd image this is way around
+
+kubectl exec httpd-pod-1 -- wget -qO- http://localhost
+
+If curl is installed
+
+kubectl exec httpd-pod-1 -- http://localhost
+
+
+Delete Pod:
+kubectl delete pod  httpd-pod-1
+
+
+===
+
+'kubectl api-resources`
+
+`kubectl api-resources` command is super handy when you're working with Kubernetes (k8s). 
+It gives you a clear overview of all the resource types that your cluster recognizes through the Kubernetes API.
+
+### 🛠 What `kubectl api-resources` Does
+This command lists all available resource types in your cluster along with some useful metadata. That includes:
+
+- **Name**: The short name used in other `kubectl` commands.
+- **Kind**: The object type (like `Pod`, `Deployment`, etc.).
+- **Group**: API group it belongs to (such as `apps`, `batch`, etc.).
+- **Namespaced**: Whether the resource is scoped to a namespace or cluster-wide.
+- **Verbs** (optional with `--verbs` flag): Lists supported operations, like `get`, `list`, `create`, etc.
+
+### 📋 Sample Output
+Here’s what a typical output might look like:
+
+```
+NAME                 SHORTNAMES   APIGROUP     NAMESPACED   KIND
+pods                 po                        true         Pod
+services             svc                       true         Service
+deployments          deploy       apps         true         Deployment
+nodes                             core        false        Node
+```
+
+### 💡 Why Use It?
+- When scripting or automating k8s tasks, this tells you what resources are available.
+- Helps you understand which resources are namespace-scoped.
+- Great for exploring custom resource definitions (CRDs).
+
+You can also use flags to modify its behavior:
+- `--namespaced=true|false`: Filter by namespace scope.
+- `--api-group=<group>`: Show only resources in a specific API group.
+- `--sort-by=name`: Sort the output by name.
+- `--no-headers`: Hide the header row for cleaner output.
+
+[node1 ~]$ kubectl api-resources 
+NAME                              SHORTNAMES   APIVERSION                             NAMESPACED   KIND
+bindings                                       v1                                     true         Binding
+
+[node1 ~]$ kubectl api-resources  | grep pod
+pods                              po           v1                                     true         Pod
+
+===
+
+Once we have yaml file in git hub rpository
+https://raw.githubusercontent.com - requires to parse yaml.
+
+[node1 ~]$ kubectl apply -f https://raw.githubusercontent.com/manish-gokhare/Purdue_k8s/master/Pods/simple-pod.yaml
+pod/nginx created
+[node1 ~]$ kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+httpd-pod-1   1/1     Running   0          55m
+nginx         1/1     Running   0          12s
+nginx-pod-1   1/1     Running   0          3h45m
+[node1 ~]$ kubectl delete -f https://raw.githubusercontent.com/manish-gokhare/Purdue_k8s/master/Pods/simple-pod.yaml
+pod "nginx" deleted
+[node1 ~]$ kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+httpd-pod-1   1/1     Running   0          55m
+nginx-pod-1   1/1     Running   0          3h45m
+
+==
+
+Copy file to pod
+===============
+
+
+[node1 ~]$ kubectl exec -it nginx -- mkdir /var/log/manish
+[node1 ~]$ kubectl exec -it nginx -- ls -ld /var/log/manish
+drwxr-xr-x 2 root root 6 Aug  2 12:31 /var/log/manish
+
+[node1 ~]$ kubectl cp /root/testfile.txt nginx:/var/log/manish 
+[node1 ~]$ kubectl exec -it nginx -- ls -l /var/log/manish
+total 0
+-rw-r--r-- 1 root root 0 Aug  2 12:34 testfile.txt
+
