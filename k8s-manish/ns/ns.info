@@ -23,6 +23,8 @@ kind: Namespace
 metadata:
   name: dev-environment
 ```
+or
+kubectl create ns dev-environment
 
 ```yaml
 apiVersion: v1
