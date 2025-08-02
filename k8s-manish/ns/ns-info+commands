@@ -56,6 +56,12 @@ NAME        READY   STATUS    RESTARTS   AGE
 nginx-pod   1/1     Running   0          9s
 
 
+# Create using yaml file.
+
+kubectl apply -f https://raw.githubusercontent.com/manish-gokhare/Purdue_k8s/master/k8s-manish/ns/ns.yml
+
+
+
 This creates a namespace called `dev-environment` and deploys an `nginx` pod inside it. 
 You can do the same for ReplicaSets, Services, and Deployments by specifying the `namespace` field.
 
