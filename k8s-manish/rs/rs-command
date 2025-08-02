@@ -1,3 +1,7 @@
 kubectl get rs -o wide  # get the RS
 
 kubectl scale rs <my-rs> --replicas=5  # To scale up or scale down 
+
+kubectl delete rs <my-rs>  # Delete the RS and all associates pods with that rs.
+
+kubectl delete rs <my-rs> --cascade=false   #  Delete the RS but keep the pod running as it is.
