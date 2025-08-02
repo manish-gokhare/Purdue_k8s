@@ -10,3 +10,45 @@ pod/nginx-pod-1 created
 [node1 ~]$ kubectl get pods -o wide
 NAME          READY   STATUS    RESTARTS   AGE   IP         NODE    NOMINATED NODE   READINESS GATES
 nginx-pod-1   1/1     Running   0          12s   10.5.1.2   node2   <none>           <none>
+
+
+## 📘 Command Overview
+
+```bash
+kubectl describe pod nginx-pod-1
+```
+This command provides **detailed information** about the Kubernetes pod named `nginx-pod-1`. It's useful for debugging, understanding resource 
+allocations, and inspecting pod status.
+
+## 🔍 What It Shows
+
+Running this command outputs:
+
+- **Pod Status**
+  - Phase (e.g., `Running`, `Pending`, `Succeeded`)
+  - Conditions (e.g., `Ready`, `Initialized`)
+- **Container Details**
+  - Container name(s), image used, port mappings
+  - Environment variables, resource limits/requests
+- **Events**
+  - Lifecycle events such as scheduling, starting, pulling images, failures
+- **Volumes & Mounts**
+  - Information about attached volumes and how they're mounted
+- **Labels & Annotations**
+  - Metadata useful for selection, filtering, and management
+- **Node Placement**
+  - The node where the pod is currently running
+
+---
+## 📎 Example Use Case
+
+If your pod `nginx-pod-1` is misbehaving or stuck in `CrashLoopBackOff`, this command helps identify issues like:
+
+- Image pull failures
+- Unsatisfied resource limits
+- Networking or volume mounting problems
+
+## 🧠 Pro Tip
+
+Use this together with `kubectl logs nginx-pod-1` to get application-level logs and pinpoint errors inside the container.
+
