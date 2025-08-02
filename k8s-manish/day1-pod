@@ -196,3 +196,22 @@ bindings                                       v1                               
 [node1 ~]$ kubectl api-resources  | grep pod
 pods                              po           v1                                     true         Pod
 
+===
+
+Once we have yaml file in git hub rpository
+https://raw.githubusercontent.com - requires to parse yaml.
+
+[node1 ~]$ kubectl apply -f https://raw.githubusercontent.com/manish-gokhare/Purdue_k8s/master/Pods/simple-pod.yaml
+pod/nginx created
+[node1 ~]$ kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+httpd-pod-1   1/1     Running   0          55m
+nginx         1/1     Running   0          12s
+nginx-pod-1   1/1     Running   0          3h45m
+[node1 ~]$ kubectl delete -f https://raw.githubusercontent.com/manish-gokhare/Purdue_k8s/master/Pods/simple-pod.yaml
+pod "nginx" deleted
+[node1 ~]$ kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+httpd-pod-1   1/1     Running   0          55m
+nginx-pod-1   1/1     Running   0          3h45m
+
