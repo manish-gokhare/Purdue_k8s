@@ -1,2 +1,3 @@
-kubectl get rs -o wide
-kubectl scale rs <my-rs> --replicas=5
+kubectl get rs -o wide  # get the RS
+
+kubectl scale rs <my-rs> --replicas=5  # To scale up or scale down 
