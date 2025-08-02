@@ -38,6 +38,10 @@ spec:
     image: nginx
 ```
 
+# kubectl run nginx-pod --image nginx -n dev-environment
+# kubectl get pod -n dev-environment 
+
+
 This creates a namespace called `dev-environment` and deploys an `nginx` pod inside it. 
 You can do the same for ReplicaSets, Services, and Deployments by specifying the `namespace` field.
 
