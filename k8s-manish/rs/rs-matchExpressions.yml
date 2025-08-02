@@ -3,10 +3,10 @@ kind: ReplicaSet
 metadata:
   name: my-rs-2
   labels:
-    app: my-second-app
+    app: my-second-app   # This is just the labels for RD
 spec:
   replicas: 4
-  selector:
+  selector:             # RS selector selects the pod based on the matchEcpression with labels on the pod.
     matchExpressions:
       - key: app
         operator: In
