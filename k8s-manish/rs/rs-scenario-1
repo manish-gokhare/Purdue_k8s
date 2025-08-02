@@ -1,5 +1,15 @@
 
-Scenario: We have two Kubernetes ReplicaSets: rs-1 and rs-2. Both rs-1 and rs-2 selectors match the same label criteria: app=nginx-app.
+Scenario:
+We have two Kubernetes ReplicaSets named rs-1 and rs-2.
+
+rs-1 is configured with a replica count of 4 and uses a selector that matches app=nginx-app.
+
+rs-2 also defines 4 replicas and uses a selector based on matchExpressions, with the key app, operator In, and value nginx-app.
+
+Both selectors target the same label criteria (app=nginx-app), and the Pods created by both rs-1 and rs-2 also carry the label nginx-app.
+
+When I apply rs-1, 4 Pods are correctly created. But when I subsequently apply rs-2, another 4 Pods are created as well, all with the same label nginx-app.
+
 What will happen if we create rs-1 followed by rs-2?
 
 ### 🛠️ Kubernetes ReplicaSet Behavior Scenario
