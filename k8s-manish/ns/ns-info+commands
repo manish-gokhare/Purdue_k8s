@@ -61,6 +61,18 @@ nginx-pod   1/1     Running   0          9s
 kubectl apply -f https://raw.githubusercontent.com/manish-gokhare/Purdue_k8s/master/k8s-manish/ns/ns.yml
 
 
+# describe ns
+
+[node1 ~]$ kubectl describe ns dev-environment 
+Name:         dev-environment
+Labels:       kubernetes.io/metadata.name=dev-environment
+Annotations:  <none>
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
+
 
 This creates a namespace called `dev-environment` and deploys an `nginx` pod inside it. 
 You can do the same for ReplicaSets, Services, and Deployments by specifying the `namespace` field.
