@@ -152,3 +152,6 @@ It should maintain 3 Pods
 Each Pod should have the label app: nginx
 
 Each Pod should run an Nginx container (nginx:latest)
+
+
+
