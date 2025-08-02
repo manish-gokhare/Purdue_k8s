@@ -135,4 +135,15 @@ nginx-pod-1   1/1     Running   0          170m   10.5.1.2   node2   <none>     
 <html><body><h1>It works!</h1></body></html>
 
 
+httpd-pod-1  can make internal web request to itself using curl. HTTP service by default listens on port 80. So if we do curl localhost
+, it acess index.html and display
+
+As curl was not installed in httpd image this is way around
+
+kubectl exec httpd-pod-1 -- wget -qO- http://localhost
+
+If curl is installed
+
+kubectl exec httpd-pod-1 -- http://localhost
+
 
