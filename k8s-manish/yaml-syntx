@@ -1,15 +1,4 @@
-kubectl get nodes    # to get the number of nodes in the cluster
-kubectl get pods -o wise    # to get the number of pods in the cluster
-
-
-[node1 ~]$ kubectl run nginx-pod-1 --image nginx
-pod/nginx-pod-1 created
-
-[node1 ~]$ kubectl get pods -o wide
-NAME          READY   STATUS    RESTARTS   AGE   IP         NODE    NOMINATED NODE   READINESS GATES
-nginx-pod-1   1/1     Running   0          12s   10.5.1.2   node2   <none>           <none>
-
-YAML template containing the basic structure you'd need to create a pod in Kubernetes, based on the details you've been working with:
+YAML template containing the basic structure you'd need to create a pod in Kubernetes
 
 ```yaml
 apiVersion: v1
