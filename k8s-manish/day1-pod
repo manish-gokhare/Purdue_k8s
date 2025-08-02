@@ -1,5 +1,5 @@
 kubectl get nodes    # to get the number of nodes in the cluster
-kubectl get pods -o wise    # to get the number of pods in the cluster
+kubectl get pods -o wide    # to get the number of pods in the cluster
 
 # To create the pod in the cluster
 
@@ -214,4 +214,19 @@ pod "nginx" deleted
 NAME          READY   STATUS    RESTARTS   AGE
 httpd-pod-1   1/1     Running   0          55m
 nginx-pod-1   1/1     Running   0          3h45m
+
+==
+
+Copy file to pod
+===============
+
+
+[node1 ~]$ kubectl exec -it nginx -- mkdir /var/log/manish
+[node1 ~]$ kubectl exec -it nginx -- ls -ld /var/log/manish
+drwxr-xr-x 2 root root 6 Aug  2 12:31 /var/log/manish
+
+[node1 ~]$ kubectl cp /root/testfile.txt nginx:/var/log/manish 
+[node1 ~]$ kubectl exec -it nginx -- ls -l /var/log/manish
+total 0
+-rw-r--r-- 1 root root 0 Aug  2 12:34 testfile.txt
 
