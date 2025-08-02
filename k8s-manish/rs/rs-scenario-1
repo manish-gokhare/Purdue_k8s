@@ -1,0 +1,52 @@
+
+Scenario: We have two Kubernetes ReplicaSets: rs-1 and rs-2. Both rs-1 and rs-2 selectors match the same label criteria: app=nginx-app.
+What will happen if we create rs-1 followed by rs-2?
+
+### 🛠️ Kubernetes ReplicaSet Behavior Scenario
+
+We encountered an interesting behavior while working with **two ReplicaSets** in Kubernetes—`rs-1` and `rs-2`.
+
+#### 📌 Configuration Overview
+
+- **rs-1**
+  - `replicas: 4`
+  - Uses `matchLabels` selector:  
+    ```yaml
+    selector:
+      matchLabels:
+        app: nginx-app
+    ```
+
+- **rs-2**
+  - `replicas: 4`
+  - Uses `matchExpressions` selector:  
+    ```yaml
+    selector:
+      matchExpressions:
+        - key: app
+          operator: In
+          values:
+            - nginx-app
+    ```
+
+- Both ReplicaSets target the same label: `app: nginx-app`
+- Pods created by both rs-1 and rs-2 are labeled with `app: nginx-app`
+
+#### ⚙️ What Happened
+
+1. When `rs-1` was applied, it created **4 pods**, all labeled `app=nginx-app`.
+2. Then, when `rs-2` was applied, it created **another 4 pods** with the **same label**.
+3. Contrary to the initial assumption, rs-2 did **not reuse or adopt** the pods created by rs-1.
+
+#### 🤔 Why rs-2 Created New Pods
+
+Even though both ReplicaSets have selectors that match the same label (`app=nginx-app`), Kubernetes doesn't allow a ReplicaSet to adopt pods that are already owned by another controller.
+
+- Each pod has a **controller reference** in its metadata, pointing to the ReplicaSet that created it.
+- Since the existing pods are owned by rs-1, rs-2 **cannot adopt** them—even though the labels match.
+- rs-2 sees **zero pods under its ownership**, so it creates 4 new pods to fulfill its `replicas` count.
+
+#### ✅ Key Takeaway
+
+Matching selectors are not enough to share or reuse pods across ReplicaSets. Kubernetes strictly maintains ownership using controller references. Every ReplicaSet manages only the pods it creates—even if multiple sets match the same labels.
+
