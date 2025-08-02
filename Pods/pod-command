@@ -1,0 +1,12 @@
+ApiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-demo
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    command: ["/bin/sh", "-c"]
+    args: ["echo 'Welcome to nginx' && nginx -g 'daemon off;'"]
+    ports:
+    - containerPort: 80
