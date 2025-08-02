@@ -49,13 +49,11 @@ kubectl get pod -A
 
 [node1 ~]$ kubectl create namespace dev-environment
 namespace/dev-environment created
-[node1 ~]$ kubectl run pod nginx-pod --image nginx:lates -n dev-environment
-pod/pod created
-[node1 ~]$ kubectl get pods
-No resources found in default namespace.
+[node1 ~]$ kubectl run nginx-pod --image nginx:latest -n dev-environment
+pod/nginx-pod created
 [node1 ~]$ kubectl get pods -n dev-environment 
-NAME   READY   STATUS             RESTARTS   AGE
-pod    0/1     ImagePullBackOff   0          18s
+NAME        READY   STATUS    RESTARTS   AGE
+nginx-pod   1/1     Running   0          9s
 
 
 This creates a namespace called `dev-environment` and deploys an `nginx` pod inside it. 
