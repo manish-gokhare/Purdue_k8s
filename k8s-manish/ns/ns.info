@@ -62,4 +62,16 @@ You can do the same for ReplicaSets, Services, and Deployments by specifying the
 
 ---
 
+
+kubectl get ns
+
+Default namespace is "default".
+
+To work in islate environment environment. We need to create ns.
+hadoop-ns
+db-ns
+kafka-ns
+monitoring-ns
+
+
 How to create a full deployment in the namespace?.
