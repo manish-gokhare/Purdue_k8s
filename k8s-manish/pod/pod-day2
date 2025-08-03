@@ -1,0 +1,23 @@
+🏷️ What Are Labels?
+Labels are key-value pairs attached to Kubernetes objects (including Pods). They’re used for:
+
+Organizing and categorizing Pods (e.g., by app name, environment, version)
+
+Selecting Pods for operations like deployment, monitoring, or traffic routing
+
+Grouping Pods logically even if they’re physically on different nodes
+
+YAMl- Declare pod with label
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app-pod
+  labels:
+    app: my-app
+    tier: frontend
+    env: staging
+
+```
+
