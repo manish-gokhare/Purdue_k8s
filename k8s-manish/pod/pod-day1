@@ -237,3 +237,143 @@ total 0
 kubectl delete pod <pod-name> --force --grace-period=0
 
 
+
+### Github Start ###
+Here's a validation of the information in your file k8s-manish/pod/pod-day1. I'll go step by step, highlighting accuracy and any potential misinformation or points needing clarification:
+
+---
+
+### 1. Getting Cluster Info
+- kubectl get nodes and kubectl get pods -o wide  
+**Correct.** These commands show node and pod info.
+
+---
+
+### 2. Creating a Pod
+- kubectl run nginx-pod-1 --image nginx  
+**Correct.** This creates a pod named nginx-pod-1 with the nginx image.
+
+---
+
+### 3. Listing Pods
+- kubectl get pods -o wide  
+**Correct.** Shows pod details including IP, node, etc.
+
+---
+
+### 4. Describing a Pod
+- kubectl describe pod nginx-pod-1  
+**Correct.** Provides detailed info for debugging.
+
+---
+
+### 5. Logs
+- kubectl logs nginx-pod-1  
+**Correct.** Shows logs from the pod.
+
+- kubectl logs pod/nginx-pod-1  
+**Correct syntax, but redundant "pod/" prefix.**  
+kubectl logs nginx-pod-1 and kubectl logs pod/nginx-pod-1 are equivalent, but the former is standard.
+
+---
+
+### 6. Exec Into Pod
+- kubectl exec -it nginx-pod-1 -- /bin/bash  
+- kubectl exec -it nginx-pod-1 -- /bin/sh  
+**Correct.** Bash may not always be present in images (nginx only has sh).
+
+---
+
+### 7. Exec with Multiple Containers
+- kubectl exec -it nginx-pod-1 -c nginx-container -- /bin/bash  
+**Correct syntax.** Use -c only if your pod has multiple containers.
+
+---
+
+### 8. One-off Commands
+- kubectl exec nginx-pod-1 -- ls /var/log  
+**Correct.**
+
+---
+
+### 9. Installing Software in a Container
+- kubectl exec nginx-pod-1 -c nginx-pod-1 -- apt-get install net-tools -y  
+**Potential confusion:**  
+- nginx official image is based on Debian, but not all images have apt-get.  
+- The container name may not be nginx-pod-1. Use actual container name if more than one.
+- Installing packages inside containers is ephemeral—changes disappear after pod restart (as you note).
+
+---
+
+### 10. Networking
+**Correct:**  
+- Pods get their own IP.
+- All pods can reach each other unless network policies restrict.
+- Using pod IPs or services for communication is accurate.
+
+---
+
+### 11. Internal Requests
+- kubectl exec nginx-pod-1 -- curl http://10.5.2.2:80  
+**Correct.** Assumes curl is present in container.
+
+- kubectl exec httpd-pod-1 -- wget -qO- http://localhost  
+**Correct.** wget can be used if curl is missing.
+
+---
+
+### 12. Deleting a Pod
+- kubectl delete pod httpd-pod-1  
+**Correct.**
+
+---
+
+### 13. kubectl api-resources
+**Correct.** Describes available resources.
+
+---
+
+### 14. Applying YAML from GitHub
+- kubectl apply -f https://raw.githubusercontent.com/...  
+**Correct.**  
+- You note parsing YAML is required; that's handled automatically by kubectl.
+
+---
+
+### 15. Copying Files to Pod
+- kubectl cp /root/testfile.txt nginx:/var/log/manish  
+**Correct.** Works as described.
+
+---
+
+### 16. Force Delete Pod
+- kubectl delete pod <pod-name> --force --grace-period=0  
+**Correct.** Use with caution; can cause data loss.
+
+---
+
+## Minor Corrections / Clarifications
+
+1. **kubectl logs pod/nginx-pod-1**  
+Standard usage is kubectl logs nginx-pod-1. The TYPE/NAME format works, but is rarely needed.
+
+2. **kubectl exec httpd-pod-1 -- http://localhost**  
+This is not correct. You need to specify a command, e.g., kubectl exec httpd-pod-1 -- curl http://localhost.
+
+3. **Installing software inside containers**  
+It's generally discouraged in production or for ephemeral pods—best practice is to bake needed tools into your image.
+
+4. **Container name confusion**  
+When using -c, ensure you know the actual container name in your pod spec (kubectl describe pod ... will show).
+
+---
+
+## Summary
+
+- All major commands and concepts are correct.
+- Minor clarifications: command syntax, ephemeral changes, container names.
+- No misleading or fundamentally incorrect information detected.
+
+If you'd like a point-by-point code review or want annotations in the file itself, let me know!
+
+#### Git Hub end #####
