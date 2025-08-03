@@ -187,6 +187,9 @@ kubectl describe pod <pod-name>
 
 This shows label changes along with other Pod metadata and status.
 
+
+You can verify whether pod run without the lable - yes pod can run without label.
+
 ---
 
 Want me to bundle this up into a cheat sheet or expand to Deployments or Services next? Your Kubernetes command toolkit is about to get ninja-level! 🥷
@@ -202,4 +205,7 @@ thirdpod     1/1     Running   0          29s    run=thirdpod
 [node1 ~]$ kubectl get pod secondpod --show-labels
 NAME        READY   STATUS    RESTARTS   AGE   LABELS
 secondpod   1/1     Running   0          64s   run=secondpod
+
+
+Po
 
