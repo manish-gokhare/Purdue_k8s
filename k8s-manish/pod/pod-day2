@@ -169,6 +169,13 @@ Example:
 kubectl get pods -l app=my-app
 ```
 
+[node1 ~]$ kubectl get pod -l team=CTS  
+
+NAME       READY   STATUS    RESTARTS   AGE
+firstpod   1/1     Running   0          29m
+thirdpod   1/1     Running   0          22m
+
+
 ---
 
 ### 💡 Bonus: Verify Changes
