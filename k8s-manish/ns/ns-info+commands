@@ -60,6 +60,12 @@ nginx-pod   1/1     Running   0          9s
 
 kubectl apply -f https://raw.githubusercontent.com/manish-gokhare/Purdue_k8s/master/k8s-manish/ns/ns.yml
 
+# How to check In which namespace are you in or hoe to check the context. It shows in which ns are you in currently.
+
+kubectl config get-contexts 
+
+# How to set the custom namespace as defualt
+kubectl config set-context --current --namespace=dev-environment 
 
 # describe ns
 
