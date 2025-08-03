@@ -10,7 +10,18 @@ Grouping Pods logically even if they’re physically on different nodes
 YAMl- Declare pod with label
 
 ```
-
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app-pod
+  labels:
+    app: my-app
+    tier: frontend
+    env: staging
+spec:
+  containers:
+  - name: my-container
+    image: nginx
 
 ```
 
