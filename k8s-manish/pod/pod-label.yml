@@ -6,3 +6,7 @@ metadata:
     app: my-app
     tier: frontend
     env: staging
+spec:
+  containers:
+  - name: my-container
+    image: nginx
