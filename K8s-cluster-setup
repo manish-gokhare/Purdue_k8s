@@ -89,7 +89,7 @@ $ sudo sysctl --system
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-sudo yum install -y containerd.io
+sudo yum install -y containerd.io  
 sudo mkdir -p /etc/containerd
 containerd config default | sudo tee /etc/containerd/config.toml
 
@@ -138,7 +138,7 @@ gpgcheck=1
 gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
 EOF
 
-sudo yum install -y kubelet kubeadm kubectl
+sudo yum install -y kubelet kubeadm kubectl   --worker 1/2
 sudo systemctl enable --now kubelet
 
 [rheluser@worker ~]$ rpm -qa | grep kub
@@ -170,7 +170,13 @@ $ sudo apt-mark hold kubeadm kubelet kubectl ( Prevent updating a package)
 
 
 
-6) Initialize Kubernetes Cluster
+6) Initialize Kubernetes Cluster only on master
+
+on rhel 8
+
+sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+
+on ubuntu:
 As all the prerequisites are met, now we are good to start the installation of Kubernetes on Ubuntu 24.04.
 
 Run following Kubeadm command from the master node only to initialize the Kubernetes cluster.
@@ -180,6 +186,7 @@ $ sudo kubeadm init --control-plane-endpoint=master.example.net --pod-network-ci
 This command will pull the required images for your Kubernetes cluster. Once this command is executed successfully
 
 *****
+
 To start using your cluster, you need to run the following as a regular user:
 
   mkdir -p $HOME/.kube
@@ -194,12 +201,14 @@ You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+
 You can now join any number of control-plane nodes by copying certificate authorities
 and service account keys on each node and then running the following as root:
 
-  kubeadm join master.example.net:6443 --token y7zwtv.qpnnovpzsx9ne7d6 \
-	--discovery-token-ca-cert-hash sha256:9a04c32799051b7b6bedae500aa0f3ca702fded44c2213f8fd6115016666e2a9 \
-	--control-plane 
+kubeadm join 10.128.0.12:6443 --token uywtap.qvmfq5aazws70zzo \
+	--discovery-token-ca-cert-hash sha256:f78318f4f76e97d416e9b063ff9b627a80a74b0fbe1ffa108d50538b4b2a745d
 
 Then you can join any number of worker nodes by running the following on each as root:
 
